@@ -1,38 +1,62 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
 
-struct Jugador {
+struct Producto {
     string nombre;
-    int puntos;
+    double precio;
+    int cantidad;
 };
 
-void sumarPuntos(Jugador& j, int extra) {
-    j.puntos += extra;
+// Devuelve la suma de precio * cantidad de todos los productos
+double calcularSubtotal(const vector<Producto>& productos) {
+    double subtotal = 0;
+    for (int i = 0; i < productos.size(); i++) {
+        subtotal += productos[i].precio * productos[i].cantidad;
+    }
+    return subtotal;
 }
 
-void mostrar(const Jugador& j) {
-    cout << j.nombre << ": " << j.puntos << " puntos" << endl;
+// Devuelve el descuento que corresponde al subtotal
+double calcularDescuento(double subtotal) {
+    return subtotal * 0.10 ;
+}
+
+// Devuelve el impuesto que corresponde a la base
+double calcularImpuesto(double base) {
+    return base * 0.13 ;
 }
 
 int main() {
-    Jugador a;
-    a.nombre = "Ana";
-    a.puntos = 90;
-    char inicial = 'A';
+    vector<Producto> productos = {
+        {"Teclado", 12500.0, 2},
+        {"Mouse", 6500.0, 3},
+        {"Cable HDMI", 3000.0, 4},
+        {"Webcam", 18000.0, 1}
+    };
 
-    // Respaldo de Ana antes de modificarla
-    Jugador respaldo = a;
-
-    sumarPuntos(a, 10);
-
-    if (a.puntos == 100) {
-        cout << "Puntaje maximo" << endl;
+    for (int i = 0; i < productos.size(); i++) {
+        cout << productos[i].nombre << " x" << productos[i].cantidad
+             << " = " << productos[i].precio * productos[i].cantidad << endl;
     }
 
-    mostrar(a);
-    mostrar(respaldo);
-    cout << "Inicial: " << inicial << endl;
+    double subtotal = calcularSubtotal(productos);
+    cout << "Subtotal: " << subtotal << endl;
+
+    // Se calcula el descuento, la base, el impuesto y el total.
+    
+    double descuento = calcularDescuento(subtotal);
+    double base = subtotal - descuento;
+    double impuesto = calcularImpuesto(base);
+    double total = base + impuesto;    
+    
+    // Luego imprime las lineas Descuento, Impuesto y Total.
+    
+    cout << "Descuento: " << descuento << endl;
+    cout << "Impuesto: " << impuesto << endl;
+    cout << "Total: " << total << endl;
+
     return 0;
 }
